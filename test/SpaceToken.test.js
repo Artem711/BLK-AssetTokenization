@@ -6,8 +6,12 @@ const expect = chai.expect
 contract("SpaceToken Test", async (accounts) => {
   const [deployerAcc, recipientAcc, otherAcc] = accounts
 
+  beforeEach(async () => {
+    this.tokenInstance = await SpaceToken.new(1000000)
+  })
+
   it("All tokens should be in my account", async () => {
-    const instance = await SpaceToken.deployed()
+    const instance = this.tokenInstance
     const totalSupply = await instance.totalSupply()
 
     expect(instance.balanceOf(deployerAcc)).to.eventually.be.a.bignumber.equal(
@@ -17,7 +21,7 @@ contract("SpaceToken Test", async (accounts) => {
 
   it("Is possible to send tokens btw accounts", async () => {
     const sendTokens = 1
-    const instance = await SpaceToken.deployed()
+    const instance = this.tokenInstance
     const totalSupply = await instance.totalSupply()
     expect(instance.balanceOf(deployerAcc)).to.eventually.be.a.bignumber.equal(
       totalSupply
@@ -33,7 +37,7 @@ contract("SpaceToken Test", async (accounts) => {
   })
 
   it("Is not possible to send more tokens - than available in total", async () => {
-    const instance = await SpaceToken.deployed()
+    const instance = this.tokenInstance
     const totalSupply = await instance.totalSupply()
     const balanceOfDeployer = await instance.balanceOf(deployerAcc)
 

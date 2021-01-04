@@ -3,20 +3,22 @@ const SpaceToken = artifacts.require("SpaceToken")
 const { chai, BN } = require("./config")
 const expect = chai.expect
 
+/// /// /// /// /// /// /// /// /// /// /// /// /// ///
+
 contract("SpaceToken Test", async (accounts) => {
   const [deployerAcc, recipientAcc, otherAcc] = accounts
 
   beforeEach(async () => {
-    this.tokenInstance = await SpaceToken.new(1000000)
+    this.tokenInstance = await SpaceToken.new(process.env.INITIAL_TOKENS)
   })
 
   it("All tokens should be in my account", async () => {
     const instance = this.tokenInstance
     const totalSupply = await instance.totalSupply()
 
-    expect(instance.balanceOf(deployerAcc)).to.eventually.be.a.bignumber.equal(
-      totalSupply
-    )
+    return expect(
+      instance.balanceOf(deployerAcc)
+    ).to.eventually.be.a.bignumber.equal(totalSupply)
   })
 
   it("Is possible to send tokens btw accounts", async () => {
@@ -31,9 +33,9 @@ contract("SpaceToken Test", async (accounts) => {
     expect(instance.balanceOf(deployerAcc)).to.eventually.be.a.bignumber.equal(
       totalSupply.sub(new BN(sendTokens))
     )
-    expect(instance.balanceOf(recipientAcc)).to.eventually.be.a.bignumber.equal(
-      new BN(sendTokens)
-    )
+    return expect(
+      instance.balanceOf(recipientAcc)
+    ).to.eventually.be.a.bignumber.equal(new BN(sendTokens))
   })
 
   it("Is not possible to send more tokens - than available in total", async () => {
@@ -46,8 +48,8 @@ contract("SpaceToken Test", async (accounts) => {
     expect(instance.balanceOf(deployerAcc)).to.eventually.be.a.bignumber.equal(
       balanceOfDeployer
     )
-    expect(instance.balanceOf(deployerAcc)).to.eventually.be.a.bignumber.equal(
-      totalSupply
-    )
+    return expect(
+      instance.balanceOf(deployerAcc)
+    ).to.eventually.be.a.bignumber.equal(totalSupply)
   })
 })

@@ -50,14 +50,25 @@ module.exports = {
     development: {
       host: "127.0.0.1", // Localhost (default: none)
       port: 7545, // Standard Ethereum port (default: none)
-      network_id: "5777", // Any network (default: none)
+      network_id: 5777, // Any network (default: none)
     },
 
     ganache_local: {
       provider: () =>
         new HDWalletProvider(process.env.MNEMONIC, "http://127.0.0.1:7545", 0),
-      network_id: "5777", // Any network (default: none)
+      network_id: 5777, // Any network (default: none)
     },
+
+    kovan_infura: {
+      provider: () =>
+        new HDWalletProvider(
+          process.env.MNEMONIC,
+          process.env.INFURA_KOVAN_URL,
+          0
+        ),
+      network_id: 42, // Any network (default: none)
+    },
+
     // Another network with more advanced options...
     // advanced: {
     // port: 8777,             // Custom port
